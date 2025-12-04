@@ -287,6 +287,27 @@ struct COMMAND_RPC_STOP_MINING {
 };
 
 //-----------------------------------------------
+struct COMMAND_RPC_MINING_STATUS {
+  typedef EMPTY_STRUCT request;
+
+  struct response {
+    std::string status;
+    bool active;
+    uint64_t speed;
+    uint32_t threads_count;
+    std::string address;
+
+    void serialize(ISerializer &s) {
+      KV_MEMBER(status)
+      KV_MEMBER(active)
+      KV_MEMBER(speed)
+      KV_MEMBER(threads_count)
+      KV_MEMBER(address)
+    }
+  };
+};
+
+//-----------------------------------------------
 struct COMMAND_RPC_STOP_DAEMON {
   typedef EMPTY_STRUCT request;
   typedef STATUS_STRUCT response;

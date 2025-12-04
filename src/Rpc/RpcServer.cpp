@@ -83,6 +83,7 @@ std::unordered_map<std::string, RpcServer::HandlerFunction> RpcServer::s_handler
   { "/sendrawtransaction", jsonMethod<COMMAND_RPC_SEND_RAW_TX>(&RpcServer::on_send_raw_tx) },
   { "/start_mining", jsonMethod<COMMAND_RPC_START_MINING>(&RpcServer::on_start_mining) },
   { "/stop_mining", jsonMethod<COMMAND_RPC_STOP_MINING>(&RpcServer::on_stop_mining) },
+  { "/mining_status", jsonMethod<COMMAND_RPC_MINING_STATUS>(&RpcServer::on_mining_status) },
   { "/stop_daemon", jsonMethod<COMMAND_RPC_STOP_DAEMON>(&RpcServer::on_stop_daemon) },
 
   // json rpc
@@ -437,6 +438,19 @@ bool RpcServer::on_stop_mining(const COMMAND_RPC_STOP_MINING::request& req, COMM
   if (!m_core.get_miner().stop()) {
     res.status = "Failed, mining not stopped";
     return true;
+  }
+  res.status = CORE_RPC_STATUS_OK;
+  return true;
+}
+
+bool RpcServer::on_mining_status(const COMMAND_RPC_MINING_STATUS::request& req, COMMAND_RPC_MINING_STATUS::response& res) {
+  CHECK_CORE_READY();
+  miner& lMiner = m_core.get_miner();
+  res.active = lMiner.is_mining();
+  res.speed = lMiner.get_speed();
+  res.threads_count = lMiner.get_threads_count();
+  if (res.active) {
+    res.address = m_core.currency().accountAddressAsString(lMiner.get_mining_address());
   }
   res.status = CORE_RPC_STATUS_OK;
   return true;

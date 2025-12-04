@@ -229,6 +229,21 @@ namespace CryptoNote
   }
   
   //-----------------------------------------------------------------------------------------------------
+  uint32_t miner::get_threads_count()
+  {
+    if(is_mining())
+      return m_threads_total;
+    else
+      return 0;
+  }
+  
+  //-----------------------------------------------------------------------------------------------------
+  const AccountPublicAddress& miner::get_mining_address()
+  {
+    return m_mine_address;
+  }
+  
+  //-----------------------------------------------------------------------------------------------------
   void miner::send_stop_signal() 
   {
     m_stop = true;
