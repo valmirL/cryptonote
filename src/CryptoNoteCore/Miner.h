@@ -31,6 +31,8 @@ namespace CryptoNote {
     bool on_block_chain_update();
     bool start(const AccountPublicAddress& adr, size_t threads_count);
     uint64_t get_speed();
+    uint32_t get_threads_count();
+    const AccountPublicAddress& get_mining_address();
     void send_stop_signal();
     bool stop();
     bool is_mining();
